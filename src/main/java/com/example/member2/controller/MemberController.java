@@ -16,7 +16,7 @@ public class MemberController {
   private final MemberService memberService;
 
   @Autowired // 작업지시서 개념, 자동으로 이렇게 해라, 생성자 주입, 빈으로 등록되어있어야(@Service, @Repository) 사용 가능
-  public MemberController(MemberService memberService) { // 생성자를 통해 생성될 때 MemberService를 의존한다, 외부로부터 매개변수 받아서 넣어준다
+  public MemberController(MemberService memberService) { // 생성자를 통해 생성될 때 MemberService에 의존한다, 외부로부터 매개변수 받아서 넣어준다
     this.memberService = memberService;
   }
 
@@ -31,7 +31,12 @@ public class MemberController {
   public String newMemberPost(MemberFromFrom memberFromFrom) {
     Member member = new Member();
     member.setName(memberFromFrom.getName());
-    System.out.println(memberService.join(member) + "번 사용자 가입 완료");
+
+    try {
+      System.out.println(memberService.join(member) + "번 사용자 가입 완료");
+    } catch (IllegalStateException e) { // MemberService의 join()이 던진거 처리
+      System.out.println("회원등록 오류 : " + e.getMessage());
+    }
 
     return "redirect:/"; // 홈화면으로 돌아간다, /를 처리하는 GetMapping으로
   }

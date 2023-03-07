@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-@Repository // 레포지토리 부품이다 라고 알려줌
+// @Repository // 레포지토리 부품이다 라고 알려줌
 public class JdbcTemplateMemberRepository implements MemberRepository {
 
   private final JdbcTemplate jdbcTemplate;
@@ -39,8 +39,7 @@ public class JdbcTemplateMemberRepository implements MemberRepository {
   @Override
   public Optional<Member> findById(Long id) {
     List<Member> result = jdbcTemplate.query("select * from member where id = ?", memberRowMapper(), id); // ?가 id
-    return result.stream().findAny(); // result >> stream 변환하고 그 중에서 하나 넘긴다
-    // return Optional.ofNullable(result.get(0));
+    return result.stream().findAny(); // result >> stream 변환하고 그 중에서 하나 넘긴다, findAny()는 result가 비어있어도 처리 가능
   }
 
   @Override

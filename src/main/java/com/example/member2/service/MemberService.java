@@ -7,20 +7,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.swing.text.html.Option;
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
-@Service
+// @Service // SpringConfig에서 Bean으로 등록 시 불필요
+@Transactional // 문제 생기면 rollback
 public class MemberService {
   private final MemberRepository memberRepository;
 
-  @Autowired
+  // @Autowired
   public MemberService(MemberRepository memberRepository) {
     this.memberRepository = memberRepository;
   }
 
   // 회원가입
-  public Long join(Member member) {
+  public Long join(Member member) throws IllegalStateException { // validateDupMember가 던진 에러를 join()을 호출한 컨트롤러에 던짐
     // if(!doesMemberExist(member)) { // 이름이 중복되지 않으면
     //   memberRepository.save(member);
     //   return member.getId();
